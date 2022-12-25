@@ -44,7 +44,9 @@ module Makara
     end
 
     def _makara_in_transaction?
-      @connection && @connection.open_transactions > 0
+      # Makara seems to execute R/W queries in a transaction, and will transparently switch servers if needed
+      # so we need to check > 1 instead of > 0 here
+      @connection && @connection.open_transactions > 1
     end
 
     # blacklist this node for @config[:blacklist_duration] seconds
