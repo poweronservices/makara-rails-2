@@ -11,7 +11,7 @@ Gem::Specification.new do |gem|
     "source_code_uri" => 'https://github.com/instacart/makara'
   }
 
-  gem.files         = `git ls-files`.split($\)
+  gem.files         = Dir.glob('makara/**/*')
   gem.executables   = gem.files.grep(%r{^bin/}).map{ |f| File.basename(f) }
   gem.test_files    = gem.files.grep(%r{^(test|spec|features)/})
   gem.name          = "makara"
@@ -20,7 +20,7 @@ Gem::Specification.new do |gem|
 
   gem.required_ruby_version = ">= 2.5.0"
 
-  gem.add_dependency "activerecord", ">= 5.2.0"
+  gem.add_dependency "activerecord", "~> 2.3"
 
   gem.add_development_dependency "rack"
   gem.add_development_dependency "rake", "~> 13.0"
