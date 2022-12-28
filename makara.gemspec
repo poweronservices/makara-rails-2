@@ -1,14 +1,14 @@
 require File.expand_path('../lib/makara/version', __FILE__)
 
 Gem::Specification.new do |gem|
-  gem.authors       = ["Mike Nelson"]
-  gem.email         = ["mike@mikeonrails.com"]
-  gem.description   = %q{Read-write split your DB yo}
-  gem.summary       = %q{Read-write split your DB yo}
-  gem.homepage      = "https://github.com/instacart/makara"
+  gem.authors       = ["Mike Nelson", "Joel Barker"]
+  gem.email         = ["mike@mikeonrails.com", "joelbarker@poweron.com"]
+  gem.description   = %q{Read-write splitting and failover for your DB in Rails 2 yo}
+  gem.summary       = %q{Read-write splitting and failover for your DB in Rails 2 yo}
+  gem.homepage      = "https://github.com/poweronservices/makara-rails-2"
   gem.licenses      = ['MIT']
   gem.metadata      = {
-    "source_code_uri" => 'https://github.com/instacart/makara'
+    "source_code_uri" => 'https://github.com/poweronservices/makara-rails-2'
   }
 
   gem.files         = Dir.glob('makara/**/*')
@@ -28,15 +28,7 @@ Gem::Specification.new do |gem|
   gem.add_development_dependency "timecop"
   gem.add_development_dependency "rubocop", "~> 1.9.1"
 
-  if RUBY_ENGINE == "jruby"
-    gem.add_development_dependency "activerecord-jdbcmysql-adapter"
-    gem.add_development_dependency "activerecord-jdbcpostgresql-adapter"
-    gem.add_development_dependency "ruby-debug"
-  else
-    gem.add_development_dependency "activerecord-postgis-adapter"
-    gem.add_development_dependency "pry-byebug"
-    gem.add_development_dependency "mysql2"
-    gem.add_development_dependency "pg"
-    gem.add_development_dependency "rgeo"
-  end
+  gem.add_development_dependency "pry-byebug"
+  gem.add_development_dependency "mysql2"
+  gem.add_development_dependency "rgeo"
 end
