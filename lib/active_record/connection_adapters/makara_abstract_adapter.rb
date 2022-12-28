@@ -29,7 +29,7 @@ module ActiveRecord
 
         def handle(connection)
           yield
-        rescue Exception => e
+        rescue StandardError => e
           # do it via class name to avoid version-specific constant dependencies
           case e.class.name
           when *harsh_errors
@@ -89,7 +89,7 @@ module ActiveRecord
         end
       end
 
-      hijack_method :execute, :exec_query, :exec_no_cache, :exec_cache, :transaction
+      hijack_methods
       send_to_all :connect, :reconnect!, :verify!, :clear_cache!, :reset!
 
       SQL_MASTER_MATCHERS           = [/\A\s*select.+for update\Z/i, /select.+lock in share mode\Z/i, /\A\s*select.+(nextval|currval|lastval|get_lock|release_lock|pg_advisory_lock|pg_advisory_unlock)\(/i].map(&:freeze).freeze
@@ -147,14 +147,14 @@ module ActiveRecord
         super
       end
 
-      def needed_by_all?(method_name, args)
+      def needed_by_all?(_method_name, args)
         sql = coerce_query_to_sql_string(args.first)
         return true if sql_all_matchers.any?{|m| sql =~ m }
 
         false
       end
 
-      def needs_master?(method_name, args)
+      def needs_master?(_method_name, args)
         sql = coerce_query_to_sql_string(args.first)
         return true if sql_master_matchers.any?{|m| sql =~ m }
         return false if sql_slave_matchers.any?{|m| sql =~ m }

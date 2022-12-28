@@ -24,7 +24,7 @@ module Makara
       master_ttl: 5,
       blacklist_duration: 30,
       sticky: true
-    }
+    }.freeze
 
     # ConnectionUrlResolver is borrowed from Rails 4-2 since its location and implementation
     # vary slightly among Rails versions, but the behavior is the same.  Thus, borrowing the

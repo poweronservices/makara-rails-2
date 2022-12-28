@@ -4,24 +4,19 @@ require 'active_support/core_ext/hash/keys'
 require 'active_support/core_ext/string/inflections'
 
 # The entry point of Makara. It contains a master and slave pool which are chosen based on the invocation
-# being proxied. Makara::Proxy implementations should declare which methods they are hijacking via the
-# `hijack_method` class method.
+# being proxied.
 # While debugging this class use prepend debug calls with Kernel. (Kernel.byebug for example)
 # to avoid getting into method_missing stuff.
 
 module Makara
   class Proxy < ::SimpleDelegator
-    METHOD_MISSING_SKIP = [ :byebug, :puts ]
+    METHOD_MISSING_SKIP = [ :byebug, :puts ].freeze
 
-    class_attribute :hijack_methods
-    self.hijack_methods = []
+    HIJACK_METHODS = [:execute, :exec_query, :exec_no_cache, :exec_cache, :transaction].freeze
 
     class << self
-      def hijack_method(*method_names)
-        self.hijack_methods = self.hijack_methods || []
-        self.hijack_methods |= method_names
-
-        method_names.each do |method_name|
+      def hijack_methods
+        HIJACK_METHODS.each do |method_name|
           define_method(method_name) do |*args, &block|
             appropriate_connection(method_name, args) do |con|
               con.send(method_name, *args, &block)
@@ -105,6 +100,7 @@ module Makara
       end
     end
 
+    # called for any method not defined here
     def method_missing(m, *args, &block)
       if METHOD_MISSING_SKIP.include?(m)
         return super
@@ -121,7 +117,7 @@ module Makara
 
     ruby2_keywords :method_missing if Module.private_method_defined?(:ruby2_keywords)
 
-    def respond_to_missing?(m, include_private = false)
+    def respond_to_missing?(m, _include_private = false)
       any_connection do |con|
         con._makara_connection.respond_to?(m, true)
       end
@@ -138,6 +134,7 @@ module Makara
       fake_wrapper
     end
 
+    # disconnect all underlying connections
     def disconnect!
       send_to_all(:disconnect!)
     rescue ::Makara::Errors::AllConnectionsBlacklisted, ::Makara::Errors::NoConnectionsAvailable
@@ -220,11 +217,11 @@ module Makara
         @master_pool
 
       # all slaves are down (or empty)
-      elsif @slave_pool.completely_blacklisted?
+      elsif @slave_pool.completely_blacklisted?  # rubocop:disable Lint/DuplicateBranch
         stick_to_master(method_name, args)
         @master_pool
 
-      elsif in_transaction?
+      elsif in_transaction?  # rubocop:disable Lint/DuplicateBranch
         @master_pool
 
       # yay! use a slave
@@ -234,7 +231,7 @@ module Makara
     end
 
     # do these args require a master connection
-    def needs_master?(method_name, args)
+    def needs_master?(_method_name, _args)
       true
     end
 
@@ -267,7 +264,7 @@ module Makara
 
     # For the generic proxy implementation, we stick if we are sticky,
     # method and args don't matter
-    def should_stick?(method_name, args)
+    def should_stick?(_method_name, _args)
       sticky?
     end
 
@@ -293,7 +290,7 @@ module Makara
       end
     end
 
-    def handling_an_all_execution(method_name)
+    def handling_an_all_execution(_method_name)
       yield
     rescue ::Makara::Errors::NoConnectionsAvailable => e
       if e.role == 'master'
@@ -307,7 +304,7 @@ module Makara
       @slave_pool.disabled = false
     end
 
-    def connection_for(config)
+    def connection_for(_config)
       Kernel.raise NotImplementedError
     end
   end

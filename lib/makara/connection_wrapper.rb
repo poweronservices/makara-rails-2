@@ -109,7 +109,7 @@ module Makara
 
     ruby2_keywords :method_missing if Module.private_method_defined?(:ruby2_keywords)
 
-    def respond_to_missing?(m, include_private = false)
+    def respond_to_missing?(m, _include_private = false)
       _makara_connection.respond_to?(m, true)
     end
 
@@ -148,7 +148,7 @@ module Makara
 
       # Each method the Makara::Proxy needs to hijack should be redefined in the underlying connection.
       # The new definition should allow for the proxy to intercept the invocation if required.
-      @proxy.class.hijack_methods.each do |meth|
+      @proxy.class::HIJACK_METHODS.each do |meth|
         method_call = RUBY_VERSION >= "3.0.0" ? "public_send(#{meth.inspect}, ...)" : "#{meth}(*args, &block)"
 
         extension << <<~RUBY

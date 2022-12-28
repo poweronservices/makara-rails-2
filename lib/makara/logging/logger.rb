@@ -7,11 +7,8 @@ module Makara
         end
 
         def logger
-          @logger
-        end
-
-        def logger=(l)
-          @logger = l
+          # probably slightly inefficient but thread-safe
+          Logger.new(STDERR)
         end
       end
     end

@@ -1,7 +1,3 @@
-require 'makara/logging/logger'
-
-Makara::Logging::Logger.logger = Logger.new(STDERR)
-
 # the following objects are required by Makara
 
 unless defined?(Concurrent)

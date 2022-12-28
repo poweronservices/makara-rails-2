@@ -39,7 +39,7 @@ jobs:
             echo "$RESULT" | grep -P 'C  |U  \x{2191}' && exit 1 || exit 0  # 2191 (upwards arrow) => high priority
       - run:
           name: Run brakeman
-          command: brakeman
+          command: brakeman --force
 workflows:
   version: 2
   build-and-test:

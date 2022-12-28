@@ -6,7 +6,7 @@ module Makara
   class ErrorHandler
     def handle(connection)
       yield
-    rescue Exception => e
+    rescue StandardError => e
       if e.is_a?(Makara::Errors::MakaraError)
         harshly(e)
       else

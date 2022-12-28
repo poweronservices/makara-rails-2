@@ -11,7 +11,7 @@ module Makara
         @weighted_connections.each_with_index do |con, index|
           if wrapper._makara_weight > con._makara_weight
             @weighted_connections.insert(index, wrapper)
-            return
+            return  # rubocop:disable Lint/NonLocalExitFromIterator
           end
         end
 
@@ -24,7 +24,7 @@ module Makara
       end
 
       def next
-        @weighted_connections.each_with_index do |con, index|
+        @weighted_connections.each_with_index do |_con, index|
           check = safe_value(index)
           next unless check
 
