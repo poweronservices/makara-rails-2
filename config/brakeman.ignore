@@ -1,0 +1,139 @@
+{
+  "ignored_warnings": [
+    {
+      "warning_type": "Denial of Service",
+      "warning_code": 88,
+      "fingerprint": "6ad4464dbb2a999591c7be8346dc137c3372b280f4a8b0c024fef91dfebeeb83",
+      "check_name": "XMLDoS",
+      "message": "Rails 2.3.18 is vulnerable to denial of service via XML parsing (CVE-2015-3227). Upgrade to Rails 3.2.22",
+      "file": "Gemfile",
+      "line": null,
+      "link": "https://groups.google.com/d/msg/rubyonrails-security/bahr2JLnxvk/x4EocXnHPp8J",
+      "code": null,
+      "render_path": null,
+      "location": null,
+      "user_input": null,
+      "confidence": "Medium",
+      "cwe_id": [
+        125
+      ],
+      "note": ""
+    },
+    {
+      "warning_type": "Cross-Site Scripting",
+      "warning_code": 28,
+      "fingerprint": "8084bafee6c3b950e6b8b13aa6b0c4671c391154144d8147ba5f9892f5b9c033",
+      "check_name": "TranslateBug",
+      "message": "Rails 2.3.x using the rails_xss plugin has a vulnerability in the translate helper with keys ending in `_html`",
+      "file": "Gemfile",
+      "line": null,
+      "link": "http://groups.google.com/group/rubyonrails-security/browse_thread/thread/2b61d70fb73c7cc5",
+      "code": null,
+      "render_path": null,
+      "location": null,
+      "user_input": null,
+      "confidence": "Medium",
+      "cwe_id": [
+        79
+      ],
+      "note": ""
+    },
+    {
+      "warning_type": "Cross-Site Request Forgery",
+      "warning_code": 116,
+      "fingerprint": "c6e6d75930cccf25e58f4a7cc543712c13b56655d079bed3d23d5b922a913ebc",
+      "check_name": "CSRFTokenForgeryCVE",
+      "message": "Rails 2.3.18 has a vulnerability that may allow CSRF token forgery. Upgrade to Rails 5.2.4.3 or patch",
+      "file": "Gemfile",
+      "line": null,
+      "link": "https://groups.google.com/g/rubyonrails-security/c/NOjKiGeXUgw",
+      "code": null,
+      "render_path": null,
+      "location": null,
+      "user_input": null,
+      "confidence": "Medium",
+      "cwe_id": [
+        352
+      ],
+      "note": ""
+    },
+    {
+      "warning_type": "SQL Injection",
+      "warning_code": 69,
+      "fingerprint": "e1b66f4311771d714a13be519693c540d7e917511a758827d9b2a0a7f958e40f",
+      "check_name": "SQLCVEs",
+      "message": "Rails 2.3.18 contains a SQL injection vulnerability (CVE-2013-6417). Upgrade to Rails 3.2.16",
+      "file": "Gemfile",
+      "line": null,
+      "link": "https://groups.google.com/d/msg/ruby-security-ann/niK4drpSHT4/g8JW8ZsayRkJ",
+      "code": null,
+      "render_path": null,
+      "location": null,
+      "user_input": null,
+      "confidence": "High",
+      "cwe_id": [
+        89
+      ],
+      "note": ""
+    },
+    {
+      "warning_type": "Remote Code Execution",
+      "warning_code": 77,
+      "fingerprint": "e833fd152ab95bf7481aada185323d97cd04c3e2322b90f3698632f4c4c04441",
+      "check_name": "DefaultRoutes",
+      "message": "Rails 2.3.18 with globbing routes is vulnerable to directory traversal and remote code execution. Patch or upgrade to Rails 3.2.18",
+      "file": "config/routes.rb",
+      "line": null,
+      "link": "http://matasano.com/research/AnatomyOfRailsVuln-CVE-2014-0130.pdf",
+      "code": null,
+      "render_path": null,
+      "location": null,
+      "user_input": null,
+      "confidence": "Medium",
+      "cwe_id": [
+        22
+      ],
+      "note": ""
+    },
+    {
+      "warning_type": "Unmaintained Dependency",
+      "warning_code": 120,
+      "fingerprint": "e9d00416c23870f08d30cfda6ad07e2138e0ce51ab6b684814eb69e789cfa631",
+      "check_name": "EOLRails",
+      "message": "Support for Rails 2.3.18 ended on 2013-06-25",
+      "file": "Gemfile",
+      "line": null,
+      "link": "https://brakemanscanner.org/docs/warning_types/unmaintained_dependency/",
+      "code": null,
+      "render_path": null,
+      "location": null,
+      "user_input": null,
+      "confidence": "High",
+      "cwe_id": [
+        1104
+      ],
+      "note": ""
+    },
+    {
+      "warning_type": "Cross-Site Scripting",
+      "warning_code": 73,
+      "fingerprint": "f6981b9c24727ef45040450a1f4b158ae3bc31b4b0343efe853fe12c64881695",
+      "check_name": "NumberToCurrency",
+      "message": "Rails 2.3.18 has a vulnerability in number helpers (CVE-2014-0081). Upgrade to Rails 3.2.17",
+      "file": "Gemfile",
+      "line": null,
+      "link": "https://groups.google.com/d/msg/ruby-security-ann/9WiRn2nhfq0/2K2KRB4LwCMJ",
+      "code": null,
+      "render_path": null,
+      "location": null,
+      "user_input": null,
+      "confidence": "Medium",
+      "cwe_id": [
+        79
+      ],
+      "note": ""
+    }
+  ],
+  "updated": "2022-12-28 20:19:53 +0000",
+  "brakeman_version": "5.4.0"
+}
