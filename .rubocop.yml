@@ -1,0 +1,32 @@
+require: rubocop-thread_safety
+
+AllCops:
+  DisplayStyleGuide: true
+  ExtraDetails: true
+  NewCops: enable
+  TargetRubyVersion: 2.5
+  Exclude:
+    - '.git/**/*'
+    - '**/*.yml'
+
+Style/ClassVars:
+  Severity: warning
+
+Style/GlobalVars:
+  Severity: warning
+
+Style/MutableConstant:
+  Severity: warning
+
+Style/RescueStandardError:
+  EnforcedStyle: explicit
+  Severity: warning
+
+ThreadSafety/ClassAndModuleAttributes:
+  Severity: warning
+
+ThreadSafety/InstanceVariableInClassMethod:
+  Severity: warning
+
+ThreadSafety/NewThread:
+  Severity: warning
