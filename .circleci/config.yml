@@ -6,6 +6,9 @@ jobs:
     steps:
       - checkout
       - run:
+          name: Run rspec tests
+          command: rspec
+      - run:
           name: Check files for valid Ruby 3.x syntax
           command: find * -name \*.rb -o -name \*.rake -o -name \*.gemspec | xargs -r -L 1 -P 10 ruby -c | ( grep -v 'Syntax OK' || true )
       - run:
