@@ -13,43 +13,13 @@ jobs:
       fail-fast: false
       matrix:
         ruby:
-          - '2.5'
-          - '2.6'
-          - '2.7'
-          - '3.0'
-          - head
-          - jruby
+          - '3.1'
         activerecord:
-          - '5.2'
-          - '6.0'
-          - '6.1'
-          - head
-        exclude:
-          - activerecord: '5.2'
-            ruby: '3.0'
-          - activerecord: '5.2'
-            ruby: head
-          - activerecord: head
-            ruby: '2.5'
-          - activerecord: head
-            ruby: '2.6'
-    continue-on-error: ${{ matrix.ruby == 'jruby' || matrix.ruby == 'head' || matrix.activerecord == 'head' }}
+          - '2.3'
     name: Ruby ${{ matrix.ruby }} / ActiveRecord ${{ matrix.activerecord }}
     services:
-      postgres:
-        image: postgis/postgis:12-3.1
-        ports:
-          - 5432:5432
-        env:
-          POSTGRES_HOST_AUTH_METHOD: trust
-          POSTGRES_DB: makara_test
-        options: >-
-          --health-cmd pg_isready
-          --health-interval 10s
-          --health-timeout 5s
-          --health-retries 5
       mysql:
-        image: mysql:5.7
+        image: mysql:8.0
         env:
           MYSQL_ALLOW_EMPTY_PASSWORD: yes
           MYSQL_DATABASE: makara_test
@@ -60,9 +30,6 @@ jobs:
           --health-interval 10s
           --health-timeout 5s
           --health-retries 5
-    env:
-       BUNDLE_GEMFILE: gemfiles/activerecord_${{ matrix.activerecord }}.gemfile
-       JRUBY_OPTS: --dev -J-Xmx1024M
     steps:
       - uses: actions/checkout@v2
       - uses: ruby/setup-ruby@v1
@@ -72,8 +39,6 @@ jobs:
       - run: |
           bundle exec rake
         env:
-          PGHOST: localhost
-          PGUSER: postgres
           MYSQL_HOST: 127.0.0.1
           RAILS_ENV: test
   RuboCop:
@@ -82,7 +47,7 @@ jobs:
       - uses: actions/checkout@v2
       - uses: ruby/setup-ruby@v1
         with:
-          ruby-version: '3.0'
+          ruby-version: '3.1'
           bundler-cache: true
       - run: |
           bundle exec rubocop --parallel --color
