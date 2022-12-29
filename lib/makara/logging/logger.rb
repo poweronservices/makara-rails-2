@@ -8,7 +8,7 @@ module Makara
 
         def logger
           # probably slightly inefficient but thread-safe
-          Logger.new(STDERR)
+          ::Logger.new(STDERR)
         end
       end
     end

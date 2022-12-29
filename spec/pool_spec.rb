@@ -147,7 +147,7 @@ describe Makara::Pool do
   end
 
   it 'should error out while blacklisted in transaction' do
-    wrapper_a = master_pool.add(pool_config){ FakeConnection.new(open_transactions: 1) }
+    wrapper_a = master_pool.add(pool_config){ FakeConnection.new(open_transactions: 2) }
     master_pool.add(pool_config){ FakeConnection.new }
     expect {
       master_pool.provide do |connection|

@@ -40,10 +40,11 @@ module Makara
       now = Time.now
 
       cookie[:max_age] = if context_data.any?
-        (context_data.values.max - now.to_f).ceil + MAX_AGE_BUFFER
-      else
-        0
+                           (context_data.values.max - now.to_f).ceil + MAX_AGE_BUFFER
+                         else
+                           0
                          end
+
       cookie[:expires] = now + cookie[:max_age]
       cookie[:value] = context_data.collect { |proxy_id, ttl| "#{proxy_id}:#{ttl}" }.join('|')
 

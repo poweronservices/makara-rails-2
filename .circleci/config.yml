@@ -6,9 +6,6 @@ jobs:
     steps:
       - checkout
       - run:
-          name: Run rspec tests
-          command: rspec
-      - run:
           name: Check files for valid Ruby 3.x syntax
           command: find * -name \*.rb -o -name \*.rake -o -name \*.gemspec | xargs -r -L 1 -P 10 ruby -c | ( grep -v 'Syntax OK' || true )
       - run:
@@ -24,25 +21,6 @@ jobs:
       - run:
           name: Run flay
           command: flay --mass 100 | tee /dev/stderr | grep -q 'Total score (lower is better) = 0'
-      - run:
-          name: Run rubocop
-          command: |
-            set -e           # fail if any of these commands fails
-            set +o pipefail  # only fail if the last command in the pipeline fails
-            rubocop --fail-level warning --display-only-fail-level-offenses --format=simple
-      - run:
-          name: Run inch
-          command: |
-            set +o pipefail  # only fail if the last command in the pipeline fails
-            RESULT=$(inch list --all --no-color)
-            echo "$RESULT"
-            # check for grade C or high priority Undocumented
-            echo
-            echo "Checking for documentation violations..."
-            echo "$RESULT" | grep -P 'C  |U  \x{2191}' && exit 1 || exit 0  # 2191 (upwards arrow) => high priority
-      - run:
-          name: Run brakeman
-          command: brakeman --force
 workflows:
   version: 2
   build-and-test:

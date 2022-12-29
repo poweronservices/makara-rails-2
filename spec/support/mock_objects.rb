@@ -50,7 +50,8 @@ end
 
 class FakeProxy < Makara::Proxy
   send_to_all :ping
-  hijack_method :execute
+  HIJACK_METHODS = [:execute].freeze
+  hijack_methods
 
   def connection_for(config)
     FakeConnection.new(config)

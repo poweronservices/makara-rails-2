@@ -1,4 +1,7 @@
 require 'uri'
+
+require 'yaml'
+
 require 'active_record'
 require 'makara'
 require 'timecop'
@@ -13,6 +16,14 @@ end
 begin
   require 'ruby-debug'
 rescue LoadError
+end
+
+require './config/initializers/makara.rb'
+
+class Object
+  def yaml_as(*args)
+    yaml_tag(*args)
+  end
 end
 
 if RUBY_VERSION >= "2.7.0"

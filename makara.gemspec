@@ -21,6 +21,8 @@ Gem::Specification.new do |gem|
   gem.required_ruby_version = '>= 2.5.0'
 
   gem.add_dependency 'activerecord', '~> 2.3'
+  gem.add_dependency 'ruby3-backward-compatibility'
+  gem.add_dependency 'activerecord-mysql2-adapter'
 
   gem.add_development_dependency 'brakeman'
   gem.add_development_dependency 'inch'
