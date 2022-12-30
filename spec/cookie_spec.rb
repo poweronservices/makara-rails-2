@@ -43,6 +43,20 @@ describe Makara::Cookie do
     let(:headers) { {} }
     let(:context_data) { { "mysql" => now.to_f + 5, "redis" => now.to_f + 5 } }
 
+    # rack gem changed the date format for expires
+    # https://github.com/rack/rack/commit/a060429848db47bf75dbb102d9059787c96de8bf#diff-85960cbd609e7f51a9881d1876b82d748f4ba8312a31e3329a5bb9bf791c60be
+    if Rack.release < '3'
+      def httpdate(time)
+        wday = Time::RFC2822_DAY_NAME[time.wday]
+        mon = Time::RFC2822_MONTH_NAME[time.mon - 1]
+        time.strftime("#{wday}, %d-#{mon}-%Y %H:%M:%S GMT")
+      end
+    else
+      def httpdate(time)
+        time.httpdate
+      end
+    end
+
     it 'does not set a cookie if there is no next context' do
       Makara::Cookie.store(nil, headers)
 
@@ -53,20 +67,20 @@ describe Makara::Cookie do
       Makara::Cookie.store(context_data, headers)
 
       expect(headers['Set-Cookie']).to include("#{cookie_key}=mysql%3A#{(now + 5).to_f}%7Credis%3A#{(now + 5).to_f};")
-      expect(headers['Set-Cookie']).to include("path=/; expires=#{(Time.now + 10).httpdate}")
+      expect(headers['Set-Cookie']).to include("path=/; expires=#{httpdate(Time.now + 10)}")
     end
 
     it 'expires the cookie if the next context is empty' do
       Makara::Cookie.store({}, headers)
 
-      expect(headers['Set-Cookie']).to eq("#{cookie_key}=; path=/; expires=#{Time.now.httpdate}")
+      expect(headers['Set-Cookie']).to eq("#{cookie_key}=; path=/; expires=#{httpdate(Time.now)}")
     end
 
     it 'allows custom cookie options to be provided' do
       Makara::Cookie.store(context_data, headers, { secure: true })
 
       expect(headers['Set-Cookie']).to include("#{cookie_key}=mysql%3A#{(now + 5).to_f}%7Credis%3A#{(now + 5).to_f};")
-      expect(headers['Set-Cookie']).to include("path=/; expires=#{(Time.now + 10).httpdate}; secure")
+      expect(headers['Set-Cookie']).to include("path=/; expires=#{httpdate(Time.now + 10)}; secure")
     end
   end
 end
