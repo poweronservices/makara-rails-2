@@ -46,6 +46,6 @@ jobs:
         if: success() || failure()
         uses: actions/upload-artifact@v3
         with:
-          name: coverage
+          name: coverage-${{ matrix.ruby }}
           path: coverage/
           retention-days: 7
