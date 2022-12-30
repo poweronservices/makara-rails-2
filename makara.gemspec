@@ -18,7 +18,7 @@ Gem::Specification.new do |gem|
   gem.require_paths = ['lib']
   gem.version       = Makara::VERSION
 
-  gem.required_ruby_version = '>= 2.5.0'
+  gem.required_ruby_version = '~> 3.0'
 
   gem.add_dependency 'activerecord', '~> 2.3'
   gem.add_dependency 'ruby3-backward-compatibility'
