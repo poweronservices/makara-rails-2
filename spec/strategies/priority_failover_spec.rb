@@ -12,9 +12,9 @@ describe Makara::Strategies::PriorityFailover do
   end
 
   it 'should take the top weight' do
-    wrapper_a = pool.add(pool_config){ FakeConnection.new(something: 'a') }
-    wrapper_b = pool.add(pool_config){ FakeConnection.new(something: 'b') }
-    wrapper_c = pool.add(pool_config.merge(weight: 2)){ FakeConnection.new(something: 'c') }
+    wrapper_a = pool.add(pool_config){ FakeConnection.new({ something: 'a' }) }
+    wrapper_b = pool.add(pool_config){ FakeConnection.new({ something: 'b' }) }
+    wrapper_c = pool.add(pool_config.merge(weight: 2)){ FakeConnection.new({ something: 'c' }) }
 
     expect(strategy.current.something).to eql('c')
     expect(strategy.next.something).to eql('c')
@@ -22,18 +22,18 @@ describe Makara::Strategies::PriorityFailover do
   end
 
   it 'should take given order if no weights' do
-    wrapper_a = pool.add(pool_config){ FakeConnection.new(something: 'a') }
-    wrapper_b = pool.add(pool_config){ FakeConnection.new(something: 'b') }
-    wrapper_c = pool.add(pool_config){ FakeConnection.new(something: 'c') }
+    wrapper_a = pool.add(pool_config){ FakeConnection.new({ something: 'a' }) }
+    wrapper_b = pool.add(pool_config){ FakeConnection.new({ something: 'b' }) }
+    wrapper_c = pool.add(pool_config){ FakeConnection.new({ something: 'c' }) }
 
     expect(strategy.current.something).to eql('a')
     expect(strategy.next.something).to eql('a')
   end
 
   it 'should handle failover to next one' do
-    wrapper_a = pool.add(pool_config){ FakeConnection.new(something: 'a') }
-    wrapper_b = pool.add(pool_config){ FakeConnection.new(something: 'b') }
-    wrapper_c = pool.add(pool_config){ FakeConnection.new(something: 'c') }
+    wrapper_a = pool.add(pool_config){ FakeConnection.new({ something: 'a' }) }
+    wrapper_b = pool.add(pool_config){ FakeConnection.new({ something: 'b' }) }
+    wrapper_c = pool.add(pool_config){ FakeConnection.new({ something: 'c' }) }
 
     pool.provide do |connection|
       if connection == wrapper_a

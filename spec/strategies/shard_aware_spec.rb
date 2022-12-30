@@ -26,9 +26,9 @@ describe Makara::Strategies::ShardAware do
     end
 
     it 'should take the top weight for a given shard' do
-      wrapper_a = pool.add(pool_config.merge(shard_id: 'shard1')){ FakeConnection.new(something: 'a') }
-      wrapper_b = pool.add(pool_config.merge(shard_id: 'shard1', weight: 2)){ FakeConnection.new(something: 'b') }
-      wrapper_c = pool.add(pool_config.merge(weight: 2, shard_id: 'shard2')){ FakeConnection.new(something: 'c') }
+      wrapper_a = pool.add(pool_config.merge(shard_id: 'shard1')){ FakeConnection.new({ something: 'a' }) }
+      wrapper_b = pool.add(pool_config.merge(shard_id: 'shard1', weight: 2)){ FakeConnection.new({ something: 'b' }) }
+      wrapper_c = pool.add(pool_config.merge(weight: 2, shard_id: 'shard2')){ FakeConnection.new({ something: 'c' }) }
 
       # default shard
       expect(strategy.current.something).to eql('c')
@@ -51,9 +51,9 @@ describe Makara::Strategies::ShardAware do
     end
 
     it 'should take given order within shard if no weights' do
-      wrapper_a = pool.add(pool_config.merge(shard_id: 'shard1')){ FakeConnection.new(something: 'a') }
-      wrapper_b = pool.add(pool_config.merge(shard_id: 'shard1')){ FakeConnection.new(something: 'b') }
-      wrapper_c = pool.add(pool_config.merge(shard_id: 'shard2')){ FakeConnection.new(something: 'c') }
+      wrapper_a = pool.add(pool_config.merge(shard_id: 'shard1')){ FakeConnection.new({ something: 'a' }) }
+      wrapper_b = pool.add(pool_config.merge(shard_id: 'shard1')){ FakeConnection.new({ something: 'b' }) }
+      wrapper_c = pool.add(pool_config.merge(shard_id: 'shard2')){ FakeConnection.new({ something: 'c' }) }
 
       # default shard
       expect(strategy.current.something).to eql('c')
@@ -74,9 +74,9 @@ describe Makara::Strategies::ShardAware do
     end
 
     it 'should handle failover to next one within shard' do
-      wrapper_a = pool.add(pool_config.merge(shard_id: 'shard1')){ FakeConnection.new(something: 'a') }
-      wrapper_b = pool.add(pool_config.merge(shard_id: 'shard1')){ FakeConnection.new(something: 'b') }
-      wrapper_c = pool.add(pool_config.merge(shard_id: 'shard2')){ FakeConnection.new(something: 'c') }
+      wrapper_a = pool.add(pool_config.merge(shard_id: 'shard1')){ FakeConnection.new({ something: 'a' }) }
+      wrapper_b = pool.add(pool_config.merge(shard_id: 'shard1')){ FakeConnection.new({ something: 'b' }) }
+      wrapper_c = pool.add(pool_config.merge(shard_id: 'shard2')){ FakeConnection.new({ something: 'c' }) }
 
       # default shard
       expect(strategy.current.something).to eql('c')
@@ -123,9 +123,9 @@ describe Makara::Strategies::ShardAware do
     end
 
     it 'should loop through with weights within shard' do
-      wrapper_a = pool.add(pool_config.merge(shard_id: 'shard1')){ FakeConnection.new(something: 'a') }
-      wrapper_b = pool.add(pool_config.merge(shard_id: 'shard1', weight: 2)){ FakeConnection.new(something: 'b') }
-      wrapper_c = pool.add(pool_config.merge(weight: 2, shard_id: 'shard2')){ FakeConnection.new(something: 'c') }
+      wrapper_a = pool.add(pool_config.merge(shard_id: 'shard1')){ FakeConnection.new({ something: 'a' }) }
+      wrapper_b = pool.add(pool_config.merge(shard_id: 'shard1', weight: 2)){ FakeConnection.new({ something: 'b' }) }
+      wrapper_c = pool.add(pool_config.merge(weight: 2, shard_id: 'shard2')){ FakeConnection.new({ something: 'c' }) }
 
       # default shard
       expect(strategy.current.something).to eql('c')
@@ -149,9 +149,9 @@ describe Makara::Strategies::ShardAware do
     end
 
     it 'should handle failover to next one within shard' do
-      wrapper_a = pool.add(pool_config.merge(shard_id: 'shard1')){ FakeConnection.new(something: 'a') }
-      wrapper_b = pool.add(pool_config.merge(shard_id: 'shard1')){ FakeConnection.new(something: 'b') }
-      wrapper_c = pool.add(pool_config.merge(shard_id: 'shard2')){ FakeConnection.new(something: 'c') }
+      wrapper_a = pool.add(pool_config.merge(shard_id: 'shard1')){ FakeConnection.new({ something: 'a' }) }
+      wrapper_b = pool.add(pool_config.merge(shard_id: 'shard1')){ FakeConnection.new({ something: 'b' }) }
+      wrapper_c = pool.add(pool_config.merge(shard_id: 'shard2')){ FakeConnection.new({ something: 'c' }) }
 
       # default shard
       expect(strategy.current.something).to eql('c')

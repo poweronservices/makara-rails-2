@@ -9,7 +9,7 @@ describe Makara::Pool do
   it 'should wrap connections with a ConnectionWrapper as theyre added to the pool' do
     expect(pool.connections).to be_empty
 
-    connection_a = FakeConnection.new(something: 'a')
+    connection_a = FakeConnection.new({ something: 'a' })
 
     wrapper_a = pool.add(pool_config){ connection_a }
     wrapper_b = pool.add(pool_config.merge(weight: 2)){ FakeConnection.new }
@@ -70,8 +70,8 @@ describe Makara::Pool do
   end
 
   it 'provides the next connection and blacklists' do
-    connection_a = FakeConnection.new(something: 'a')
-    connection_b = FakeConnection.new(something: 'b')
+    connection_a = FakeConnection.new({ something: 'a' })
+    connection_b = FakeConnection.new({ something: 'b' })
 
     wrapper_a = pool.add(pool_config){ connection_a }
     wrapper_b = pool.add(pool_config){ connection_b }
@@ -147,7 +147,7 @@ describe Makara::Pool do
   end
 
   it 'should error out while blacklisted in transaction' do
-    wrapper_a = master_pool.add(pool_config){ FakeConnection.new(open_transactions: 2) }
+    wrapper_a = master_pool.add(pool_config){ FakeConnection.new({ open_transactions: 2 }) }
     master_pool.add(pool_config){ FakeConnection.new }
     expect {
       master_pool.provide do |connection|
@@ -159,7 +159,7 @@ describe Makara::Pool do
   end
 
   it 'skips blacklisted connections in master pool when not in transaction' do
-    wrapper_a = master_pool.add(pool_config){ FakeConnection.new(open_transactions: 0) }
+    wrapper_a = master_pool.add(pool_config){ FakeConnection.new({ open_transactions: 0 }) }
     master_pool.add(pool_config){ FakeConnection.new }
     master_pool.provide do |connection|
       if connection == wrapper_a
