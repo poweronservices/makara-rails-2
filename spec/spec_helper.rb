@@ -33,6 +33,11 @@ if RUBY_VERSION >= "2.7.0"
   Warning[:deprecated] = true
 end
 
+unless defined?(FixNum)
+  # for Rails 3.2+ compatibility
+  ::Fixnum = ::Integer
+end
+
 RSpec.configure do |config|
   config.run_all_when_everything_filtered = true
   config.filter_run :focus
