@@ -40,3 +40,10 @@ jobs:
         env:
           MYSQL_HOST: 127.0.0.1
           RAILS_ENV: test
+      - name: Archive coverage artifacts
+        if: success() || failure()
+        uses: actions/upload-artifact@v3
+        with:
+          name: coverage
+          path: coverage/
+          retention-days: 7

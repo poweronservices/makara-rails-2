@@ -1,5 +1,6 @@
 # the following objects are required by Makara
 
+# :nocov:
 unless defined?(Concurrent)
   module Concurrent
     def self.monotonic_time
@@ -15,3 +16,4 @@ end
 unless defined?(Time::RFC2822_MONTH_NAME)
   Time::RFC2822_MONTH_NAME = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'].freeze
 end
+# :nocov:

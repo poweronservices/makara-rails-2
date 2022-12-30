@@ -1,7 +1,10 @@
+require 'simplecov'
+SimpleCov.minimum_coverage 90
+SimpleCov.minimum_coverage_by_file 80
+SimpleCov.start
+
 require 'uri'
-
 require 'yaml'
-
 require 'active_record'
 require 'makara'
 require 'timecop'

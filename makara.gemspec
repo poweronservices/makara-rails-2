@@ -29,6 +29,7 @@ Gem::Specification.new do |gem|
   gem.add_development_dependency 'rack'
   gem.add_development_dependency 'rake', '~> 13.0'
   gem.add_development_dependency 'rspec', '~> 3.9'
+  gem.add_development_dependency 'simplecov'
   gem.add_development_dependency 'rubocop'
   gem.add_development_dependency 'rubocop-thread_safety'
   gem.add_development_dependency 'rubycritic'
