@@ -27,14 +27,15 @@ module Makara
 
         idx = @current_idx
 
-        begin
+        loop do
           idx = next_index(idx)
 
           # if we've looped all the way around, return our safe value
           return safe_value(idx, true) if idx == @current_idx
 
-        # while our current safe value is dangerous
-        end while safe_value(idx).nil?
+          # while our current safe value is dangerous
+          break unless safe_value(idx).nil?
+        end
 
         # store our current spot and return our safe value
         safe_value(idx, true)

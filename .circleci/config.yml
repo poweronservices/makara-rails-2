@@ -1,0 +1,57 @@
+version: 2.1
+jobs:
+  ruby-tests:
+    docker:
+      - image: cimg/ruby:3.1.2-browsers
+    steps:
+      - checkout
+      - run:
+          name: Check files for valid Ruby 3.x syntax
+          command: find * -name \*.rb -o -name \*.rake -o -name \*.gemspec | xargs -r -L 1 -P 10 ruby -c | ( grep -v 'Syntax OK' || true )
+      - run:
+          name: Check files for non-ASCII characters
+          command: |
+            grep --exclude-dir log --exclude-dir tmp -Ilr . * | grep -vFf .ascii_check_ignore | xargs grep -nPo '.{0,100}[^\x09-\x7e].{0,100}' \
+            && echo 'Found non-ASCII character: please replace these with ASCII characters or HTML entities!' \
+            && exit 1 \
+            || exit 0
+      - run:
+          name: Install gems
+          command: bundle
+      - run:
+          name: Run flay
+          command: flay --mass 100 | tee /dev/stderr | grep -q 'Total score (lower is better) = 0'
+      - run:
+          name: Run rubocop
+          command: |
+            set -e           # fail if any of these commands fails
+            set +o pipefail  # only fail if the last command in the pipeline fails
+            rubocop --fail-level warning --display-only-fail-level-offenses --format=simple
+      - run:
+          name: Run inch
+          command: |
+            set +o pipefail  # only fail if the last command in the pipeline fails
+            RESULT=$(inch list --all --no-color)
+            echo "$RESULT"
+            # check for grade C or high priority Undocumented
+            echo
+            echo "Checking for documentation violations..."
+            echo "$RESULT" | grep -P 'C  |U  \x{2191}' && exit 1 || exit 0  # 2191 (upwards arrow) => high priority
+      - run:
+          name: Run brakeman
+          command: brakeman --force
+workflows:
+  version: 2
+  build-and-test:
+    jobs:
+      - ruby-tests
+  weekly:
+    jobs:
+      - ruby-tests
+    triggers:
+      - schedule:
+          cron: "0 0 * * 0"
+          filters:
+            branches:
+              only:
+                - rails-2

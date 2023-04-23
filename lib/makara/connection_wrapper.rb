@@ -44,7 +44,9 @@ module Makara
     end
 
     def _makara_in_transaction?
-      @connection && @connection.open_transactions > 0
+      # Makara seems to execute R/W queries in a transaction, and will transparently switch servers if needed
+      # so we need to check > 1 instead of > 0 here
+      @connection && @connection.open_transactions > 1
     end
 
     # blacklist this node for @config[:blacklist_duration] seconds
@@ -107,7 +109,7 @@ module Makara
 
     ruby2_keywords :method_missing if Module.private_method_defined?(:ruby2_keywords)
 
-    def respond_to_missing?(m, include_private = false)
+    def respond_to_missing?(m, _include_private = false)
       _makara_connection.respond_to?(m, true)
     end
 
@@ -146,7 +148,7 @@ module Makara
 
       # Each method the Makara::Proxy needs to hijack should be redefined in the underlying connection.
       # The new definition should allow for the proxy to intercept the invocation if required.
-      @proxy.class.hijack_methods.each do |meth|
+      @proxy.class::HIJACK_METHODS.each do |meth|
         method_call = RUBY_VERSION >= "3.0.0" ? "public_send(#{meth.inspect}, ...)" : "#{meth}(*args, &block)"
 
         extension << <<~RUBY
@@ -157,24 +159,6 @@ module Makara
               else
                 super
               end
-            end
-          end
-        RUBY
-      end
-
-      # Control methods must always be passed to the
-      # Makara::Proxy control object for handling (typically
-      # related to ActiveRecord connection pool management)
-      @proxy.class.control_methods.each do |meth|
-        method_call = RUBY_VERSION >= "3.0.0" ? "public_send(#{meth.inspect}, ...)" : "#{meth}(*args=args, block)"
-
-        extension << <<~RUBY
-          def #{meth}(#{args})
-            proxy = _makara
-            if proxy
-              proxy.control.#{method_call}
-            else
-              super # Only if we are not wrapped any longer
             end
           end
         RUBY

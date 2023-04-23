@@ -1,0 +1,26 @@
+development:
+  adapter: mysql2_makara
+  host: db
+  port: 3306
+  database: development
+  username: dev_user
+  password: s3cr3t
+  encoding: utf8mb4
+  ssl_mode: required
+  connect_timeout: 5  # if a server is down, every page load will be delayed this long
+  makara:
+    master_strategy: failover
+    blacklist_duration: 8  # this should be greater than connect_timeout
+    connection_error_matchers:
+      - "/Gone Away/"
+      - "/Can't connect to MySQL/"
+      - "/MySQL client is not connected/"
+      - "/Lost connection to MySQL server/"
+      - "/The MySQL server is running with the --super-read-only option so it cannot execute this statement/"
+    connections:
+      - host: db1.sql.host
+        role: master
+      - host: db2.sql.host
+        role: master
+      - host: db3.sql.host
+        role: master

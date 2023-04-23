@@ -7,7 +7,7 @@ module Makara
     DEFAULT_OPTIONS = {
       path: "/",
       http_only: true
-    }
+    }.freeze
 
     MAX_AGE_BUFFER = 5
 
@@ -43,7 +43,7 @@ module Makara
         (context_data.values.max - now.to_f).ceil + MAX_AGE_BUFFER
       else
         0
-      end
+                         end
       cookie[:expires] = now + cookie[:max_age]
       cookie[:value] = context_data.collect { |proxy_id, ttl| "#{proxy_id}:#{ttl}" }.join('|')
 
